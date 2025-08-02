@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Leaderboard - Intern Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background: linear-gradient(to right, #193a48, #213c46, #2c5364);
+      font-family: 'Quicksand', sans-serif;
+      color: #fff;
+      padding: 40px;
+      min-height: 100vh;
+    }
+
+    .leaderboard-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+      font-weight: 600;
+    }
+
+    .leader-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+
+    .leader-card:hover {
+      transform: scale(1.03);
+    }
+
+    .avatar {
+      width: 70px;
+      border-radius: 50%;
+    }
+
+    .rank-badge {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #ffd700;
+    }
+
+    .amount-raised {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: #fff;
+      color: #203a43;
+      border-radius: 50%;
+      padding: 10px 14px;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+
+<a href="dashboard.html" class="back-btn">&#8592;</a>
+
+<div class="row g-4" id="leaderboardContainer">
+  <!-- Cards will be populated dynamically -->
+</div>
+
+<script>
+  fetch('/api/leaderboard')
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById('leaderboardContainer');
+      const medals = ['🥇', '🥈', '🥉'];
+
+      data.forEach((user, i) => {
+        const col = document.createElement('div');
+        col.className = 'col-md-4';
+
+        col.innerHTML = `
+          <div class="leader-card text-center">
+            <img src="${user.avatar}" class="avatar mb-2" alt="Avatar" />
+            <div class="rank-badge">${medals[i] || '#'+(i+1)} #${user.rank} - ${user.name}</div>
+            <div class="amount-raised">₹${user.amount.toLocaleString()}</div>
+          </div>
+        `;
+        container.appendChild(col);
+      });
+    })
+    .catch(err => console.error('Leaderboard load error:', err));
+</script>
+
+</body>
+</html>

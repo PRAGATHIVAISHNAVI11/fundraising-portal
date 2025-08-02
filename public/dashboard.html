@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard - Intern Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    :root {
+      --bg-gradient-dark: linear-gradient(to right, #8e2de2, #4a00e0);
+      --bg-gradient-light: linear-gradient(to right, #e0eafc, #cfdef3);
+      --text-dark: #fff;
+      --text-light: #111;
+      --card-dark: rgba(255, 255, 255, 0.1);
+      --card-light: rgba(255, 255, 255, 0.85);
+    }
+
+    [data-theme="light"] {
+      --bg: var(--bg-gradient-light);
+      --text: var(--text-light);
+      --card: var(--card-light);
+    }
+
+    [data-theme="dark"] {
+      --bg: var(--bg-gradient-dark);
+      --text: var(--text-dark);
+      --card: var(--card-dark);
+    }
+
+    html,
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Quicksand', sans-serif;
+      transition: all 0.5s ease;
+      min-height: 100vh;
+      padding: 40px;
+    }
+
+    .card-glass {
+      background: var(--card);
+      color: var(--text);
+      border-radius: 20px;
+      padding: 30px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .dashboard-title {
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 600;
+      font-size: 2.5rem;
+    }
+
+    .avatar {
+      width: 100px;
+      border-radius: 50%;
+    }
+
+    .btn-next {
+      background-color: #fff;
+      color: #4a00e0;
+      border-radius: 30px;
+      font-weight: bold;
+      padding: 10px 25px;
+      text-decoration: none;
+    }
+
+    .stats-value {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+
+    .stats-label {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    .progress {
+      height: 20px;
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .badge-icon {
+      font-size: 1.5rem;
+      margin-right: 10px;
+    }
+
+    .countdown-box {
+      font-size: 1.3rem;
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    canvas {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+    }
+
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      transition: 0.4s ease;
+    }
+
+    .unlockables {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .reward {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 20px;
+      border-radius: 15px;
+      width: 160px;
+      text-align: center;
+      color: var(--text);
+      font-weight: 600;
+      opacity: 0;
+      transform: scale(0.8);
+      animation: popIn 0.6s ease forwards;
+    }
+
+    .reward:nth-child(1) {
+      animation-delay: 0.3s;
+    }
+
+    .reward:nth-child(2) {
+      animation-delay: 0.6s;
+    }
+
+    .reward:nth-child(3) {
+      animation-delay: 0.9s;
+    }
+
+    @keyframes popIn {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container position-relative">
+
+    <button class="btn btn-light theme-toggle" id="themeToggle">Toggle Theme</button>
+
+    <h1 class="dashboard-title">Your Dashboard</h1>
+
+    <div class="row g-4">
+      <!-- User Info -->
+      <div class="col-md-4">
+        <div class="card-glass text-center">
+          <img src="https://cdn-icons-png.flaticon.com/512/706/706830.png" class="avatar mb-3" alt="Avatar">
+          <h4 id="userName">Hi, Intern!</h4>
+          <p id="refcode">Intern ID</p>
+          <p id=".stats-value">Role: Fundraising Intern</p>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="col-md-4">
+        <div class="card-glass text-center">
+          <div class="stats-value">₹10,500</div>
+          <div class="stats-label">Raised So Far</div>
+          <hr />
+          <div class="stats-value">16</div>
+          <div class="stats-label">Contributors</div>
+        </div>
+      </div>
+
+      <!-- Referral -->
+      <div class="col-md-4">
+        <div class="card-glass text-center">
+          <div class="stats-value" id="refCode">REF12345</div>
+          <div class="stats-label">Your Referral Code</div>
+          <hr />
+          <a href="leaderboard.html" class="btn btn-next mt-2">Leaderboard</a><br />
+          <a href="rewards.html" class="btn btn-next mt-3">View Rewards</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row mt-5">
+      <div class="col-md-6">
+        <div class="card-glass">
+          <h5 class="text-center mb-4">Fundraising Progress</h5>
+          <canvas id="fundChart"></canvas>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card-glass">
+          <h5 class="text-center mb-4">Contributor Sources</h5>
+          <canvas id="sourceChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Task Progress -->
+    <div class="row mt-5">
+      <div class="col-md-12">
+        <div class="card-glass">
+          <h5 class="mb-3">Task Completion</h5>
+          <div class="progress mb-2">
+            <div class="progress-bar bg-success" style="width: 75%;">75%</div>
+          </div>
+          <small>You've completed 15 out of 20 outreach tasks.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Unlockables -->
+    <div class="row mt-5">
+      <div class="col-md-12">
+        <div class="card-glass text-center">
+          <h5 class="mb-3">🏆 Unlockables</h5>
+          <div class="unlockables">
+            <div class="reward">🥇 Gold Badge</div>
+            <div class="reward">🎯 Social Star</div>
+            <div class="reward">📣 Top Referrer</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Countdown -->
+    <div class="row mt-4">
+      <div class="col-md-12">
+        <div class="card-glass text-center">
+          <h5>Countdown to Goal (Aug 31)</h5>
+          <div class="countdown-box" id="countdown">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Auto theme detection
+    const root = document.documentElement;
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem("theme");
+    const defaultTheme = savedTheme || (prefersDark ? "dark" : "light");
+    root.setAttribute("data-theme", defaultTheme);
+    document.getElementById("themeToggle").innerText = `Switch to ${defaultTheme === "dark" ? "Light" : "Dark"} Mode`;
+
+    document.getElementById("themeToggle").onclick = () => {
+      const current = root.getAttribute("data-theme");
+      const newTheme = current === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
+      document.getElementById("themeToggle").innerText = `Switch to ${newTheme === "dark" ? "Light" : "Dark"} Mode`;
+      updateChartColors(newTheme);
+    };
+
+    // ✅ Fetch real user data from backend
+    fetch('/api/user')
+      .then(res => res.json())
+      .then(user => {
+        document.getElementById("userName").innerText = `Hi, ${user.name}!`;
+        document.getElementById("refCode").innerText = user.referral;
+        document.querySelector(".stats-value").innerText = `₹${user.amountRaised.toLocaleString()}`;
+      });
+
+    // Countdown
+    function updateCountdown() {
+      const goalDate = new Date("August 31, 2025 23:59:59").getTime();
+      const now = new Date().getTime();
+      const diff = goalDate - now;
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+      document.getElementById("countdown").innerText =
+        diff > 0 ? `${days}d ${hours}h ${mins}m ${secs}s remaining` : "Goal Reached!";
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // Charts
+    const fundCtx = document.getElementById('fundChart').getContext('2d');
+    const fundChart = new Chart(fundCtx, {
+      type: 'line',
+      data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+        datasets: [{
+          label: '₹ Raised',
+          data: [1500, 3200, 7000, 10500],
+          fill: true,
+          backgroundColor: 'rgba(255,255,255,0.1)',
+          borderColor: '#ffffff',
+          pointBackgroundColor: '#ffffff',
+          tension: 0.4
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { labels: { color: '#fff' } }
+        },
+        scales: {
+          x: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
+          y: { ticks: { color: '#fff' }, grid: { color: 'rgba(255,255,255,0.1)' } }
+        }
+      }
+    });
+
+    const sourceCtx = document.getElementById('sourceChart').getContext('2d');
+    const sourceChart = new Chart(sourceCtx, {
+      type: 'pie',
+      data: {
+        labels: ['Friends', 'Family', 'Social Media'],
+        datasets: [{
+          data: [6, 5, 5],
+          backgroundColor: ['#ff7675', '#74b9ff', '#55efc4']
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { labels: { color: '#fff' } }
+        }
+      }
+    });
+
+    function updateChartColors(theme) {
+      const color = theme === "light" ? "#111" : "#fff";
+      const grid = theme === "light" ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.1)";
+      fundChart.options.plugins.legend.labels.color = color;
+      fundChart.options.scales.x.ticks.color = color;
+      fundChart.options.scales.x.grid.color = grid;
+      fundChart.options.scales.y.ticks.color = color;
+      fundChart.options.scales.y.grid.color = grid;
+      fundChart.update();
+
+      sourceChart.options.plugins.legend.labels.color = color;
+      sourceChart.update();
+    }
+  </script>

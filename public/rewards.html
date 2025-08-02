@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rewards - Intern Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    body {
+      background: linear-gradient(to right, #1d3f7e, #3165a1);
+      font-family: 'Quicksand', sans-serif;
+      color: #fff;
+      padding: 40px;
+      min-height: 100vh;
+    }
+
+    .rewards-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+      font-weight: 600;
+    }
+
+    .reward-card {
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.3s, box-shadow 0.3s;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      backdrop-filter: blur(8px);
+    }
+
+    .reward-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+    }
+
+    .reward-image {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 15px;
+    }
+
+    .reward-name {
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    .reward-description {
+      font-size: 1rem;
+      margin-top: 8px;
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background-color: #fff;
+      color: #203a43;
+      border-radius: 50%;
+      padding: 10px 14px;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+
+<a href="dashboard.html" class="back-btn">&#8592;</a>
+
+<div class="container">
+  <h1 class="rewards-title">Rewards & Milestones</h1>
+
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="reward-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/10692/10692495.png" class="reward-image" alt="Trophy">
+        <div class="reward-name">Starter Badge</div>
+        <div class="reward-description">Raise ₹1,000 to earn your first badge!</div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="reward-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/4783/4783110.png" class="reward-image" alt="Gift Box">
+        <div class="reward-name">Exclusive Merchandise</div>
+        <div class="reward-description">Raise ₹5,000 to unlock T-shirt, cap and more!</div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="reward-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/726/726448.png" class="reward-image" alt="Medal">
+        <div class="reward-name">Superstar Medal</div>
+        <div class="reward-description">Raise ₹10,000+ and get a personalized certificate & trophy!</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
